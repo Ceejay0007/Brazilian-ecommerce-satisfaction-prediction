@@ -1,4 +1,4 @@
-mport pandas as pd  # For loading, manipulating and analyzing structured data 
+import pandas as pd  # For loading, manipulating and analyzing structured data 
 import numpy as np # USed for numerical computation and array operations 
 import matplotlib.pyplot as plt #Creating Basic charts and visualizations
 import seaborn as sns #Creating more advance and visual statistical plots 
