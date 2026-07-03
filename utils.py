@@ -27,3 +27,38 @@ def load_data():
     df = df.merge(customers, on="customer_id", how="left")
 
     return df
+# NEw cleaned data from the cleaning we did in my data cleaning and feature engineering.
+def clean_data(df):
+    """
+    Cleans and prepares the master dataframe for analysis.
+    Drops unnecessary columns, handles missing values,
+    converts dates, and engineers new features.
+    """
+    df = df.drop(columns=[
+        "review_comment_title", "review_comment_message",
+        "review_id", "order_item_id", "product_id",
+        "seller_id", "customer_unique_id", "customer_zip_code_prefix"
+    ])
+
+    df = df.dropna(subset=["review_score"])
+    df = df.dropna()
+
+    date_cols = [
+        "order_purchase_timestamp", "order_approved_at",
+        "order_delivered_carrier_date", "order_delivered_customer_date",
+        "order_estimated_delivery_date"
+    ]
+    for col in date_cols:
+        df[col] = pd.to_datetime(df[col])
+
+    df["delivery_days"] = (
+        df["order_delivered_customer_date"] -
+        df["order_purchase_timestamp"]
+    ).dt.days
+
+    df["delivered_late"] = (
+        df["order_delivered_customer_date"] >
+        df["order_estimated_delivery_date"]
+    ).astype(int)
+
+    return df
